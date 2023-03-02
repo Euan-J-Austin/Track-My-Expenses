@@ -11,7 +11,7 @@
 
 #okay, good progress so far ... next is to return user to previous input menu, return to parent input menu, print the table so it is legible
 #as opposed to arrays, make sure no duplicate IDs ... generate unique ID by combination of inputs, new class for outputDB e.g. summing total
-#expenses, expenses for certain payee etc. 
+#expenses, expenses for certain payee etc. .... return current table or oprtion to after modification, print table so it looks pretty
 
 table = [['ID', 'Sum', 'Payee']]
 
@@ -33,12 +33,14 @@ class modifyDb:
               del[x[1]]
               print(x)
               new_sum = input("Enter a new sum: ")
-              return x.insert(1, new_sum)
+              x.insert(1, new_sum)
+              return print(x)
             elif usr_inp == 'Payee':
               del[x[2]]
               print(x)
               new_payee = input("Enter a new payee: ")
-              return x.insert(2, new_payee)
+              x.insert(2, new_payee)
+              return print(x)
             else:
               break
     
@@ -55,8 +57,7 @@ Type '3' for metrics.\n
 """)
 
 open = input()
-
-
+print(type(open))
 if open == "1":
   print(table)
 if open == "2":
@@ -69,10 +70,19 @@ Type '3' to change expense details.\n
   """)
   modify_inpt = input()
   if modify_inpt == "1":
-    add_exp = input("Enter an expense in 'ID, Amount, Payee' format e.g. 1, 17.00, James: ").split(',')
+    add_exp = input("Enter an expense for addition in the 'ID, Amount, Payee' format e.g. 1, 17.00, James: ").split(',')
     id = add_exp[0]
     amount = add_exp[1]
     payee = add_exp[2]
     db.add_expense(id, amount, payee)
-    print(f'Your expense has been added:\n {table}')
-
+    print(f'Your expense has been added:\n{table}')
+  if modify_inpt == "2":
+    del_exp = input("Enter ID of expense for deletion: ")
+    id = del_exp
+    db.del_expense(id)
+    print(f'Expense ID {id} was deleted:\n{table}')
+  if modify_inpt == "3":
+    mod_exp = input("Enter ID of expense for modification: ")
+    id = mod_exp
+    db.mod_expense(id)
+    

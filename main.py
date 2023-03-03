@@ -13,6 +13,7 @@
 #as opposed to arrays, make sure no duplicate IDs ... generate unique ID by combination of inputs, new class for outputDB e.g. summing total
 #expenses, expenses for certain payee etc. .... return current table or oprtion to after modification, print table so it looks pretty
 
+
 table = [['ID', 'Sum', 'Payee']]
 
 class modifyDb:
@@ -43,10 +44,22 @@ class modifyDb:
               return print(x)
             else:
               break
-    
-db = modifyDb()
 
-print("""
+class modifyDbMenu(modifyDb):
+  def __init__(self):
+    pass
+
+class outputDb:
+  def __init__(self):
+    pass
+  def print_db():
+    return print(table)
+
+class navDb:
+  def __init__(self):
+    pass
+  def parent_menu(self):
+    return print("""
 Welcome to Track-My-Expenses! 
 
 Type '1' to see your expenses.
@@ -55,34 +68,54 @@ Type '2' to modify expenses.
 
 Type '3' for metrics.\n
 """)
-
-open = input()
-print(type(open))
-if open == "1":
-  print(table)
-if open == "2":
-  print ("""
+  def mod_menu(self):
+    return print ("""
 Type 1' to add an expense.
 
 Type '2' to delete an expense.
 
 Type '3' to change expense details.\n
+
+Type '4' to return to the parent menu.
   """)
+
+
+  
+  
+    
+
+mdb = modifyDb()
+odb = outputDb()
+ndb = navDb()
+
+ndb.parent_menu()
+
+#need to create a subclass for the menu operations so they can be used more than one and returned to
+
+open = input()
+if open == "1":
+  odb.print_db()
+  #return to parent_menu
+if open == "2":
+  ndb.mod_menu() 
   modify_inpt = input()
   if modify_inpt == "1":
-    add_exp = input("Enter an expense for addition in the 'ID, Amount, Payee' format e.g. 1, 17.00, James: ").split(',')
+    add_exp = input("\nEnter an expense for addition in the 'ID, Amount, Payee' format e.g. 1, 17.00, James: ").split(',')
     id = add_exp[0]
     amount = add_exp[1]
     payee = add_exp[2]
-    db.add_expense(id, amount, payee)
+    mdb.add_expense(id, amount, payee)
     print(f'Your expense has been added:\n{table}')
   if modify_inpt == "2":
     del_exp = input("Enter ID of expense for deletion: ")
     id = del_exp
-    db.del_expense(id)
+    mdb.del_expense(id)
     print(f'Expense ID {id} was deleted:\n{table}')
   if modify_inpt == "3":
     mod_exp = input("Enter ID of expense for modification: ")
     id = mod_exp
-    db.mod_expense(id)
+    mdb.mod_expense(id)
+  if modify_inpt == "4":
+    pass
+    #return to parent menu
     

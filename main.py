@@ -45,21 +45,18 @@ class modifyDb:
             else:
               break
 
-class modifyDbMenu(modifyDb):
-  def __init__(self):
-    pass
-
 class outputDb:
   def __init__(self):
     pass
-  def print_db():
-    return print(table)
+  def print_db(self):
+    for row in table:
+      print(*row)
 
-class navDb:
+class navDb(modifyDb, outputDb):
   def __init__(self):
     pass
   def parent_menu(self):
-    return print("""
+    print("""
 Welcome to Track-My-Expenses! 
 
 Type '1' to see your expenses.
@@ -68,8 +65,15 @@ Type '2' to modify expenses.
 
 Type '3' for metrics.\n
 """)
+    open = input()
+    if open == "1":
+      odb.print_db()
+    if open == "2":
+      # add mod menu here, will need to be moved to new class 
+      
+      
   def mod_menu(self):
-    return print ("""
+    print ("""
 Type 1' to add an expense.
 
 Type '2' to delete an expense.
@@ -78,6 +82,7 @@ Type '3' to change expense details.\n
 
 Type '4' to return to the parent menu.
   """)
+    
 
 
   
@@ -90,8 +95,6 @@ ndb = navDb()
 
 ndb.parent_menu()
 
-#need to create a subclass for the menu operations so they can be used more than one and returned to
-
 open = input()
 if open == "1":
   odb.print_db()
@@ -102,7 +105,7 @@ if open == "2":
   if modify_inpt == "1":
     add_exp = input("\nEnter an expense for addition in the 'ID, Amount, Payee' format e.g. 1, 17.00, James: ").split(',')
     id = add_exp[0]
-    amount = add_exp[1]
+    amount = round(add_exp[1])
     payee = add_exp[2]
     mdb.add_expense(id, amount, payee)
     print(f'Your expense has been added:\n{table}')
@@ -118,4 +121,3 @@ if open == "2":
   if modify_inpt == "4":
     pass
     #return to parent menu
-    

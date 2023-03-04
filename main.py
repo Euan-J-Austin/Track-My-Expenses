@@ -9,9 +9,7 @@
 #outputs -- view segments of expenses (total by time period, payee, type,), comparison (fixed this month vs last) ... uses classes?
 #database- stores inputs, queried for outputs ... arrays and sub arrays?, need some key by which always identified like ID? 
 
-#okay, good progress so far ... next is to return user to previous input menu, return to parent input menu, print the table so it is legible
-#as opposed to arrays, make sure no duplicate IDs ... generate unique ID by combination of inputs, new class for outputDB e.g. summing total
-#expenses, expenses for certain payee etc. .... return current table or oprtion to after modification, print table so it looks pretty
+#to do: pretty table, unique id, measures class
 
 
 table = [['ID', 'Sum', 'Payee']]
@@ -45,79 +43,77 @@ class modifyDb:
             else:
               break
 
-class outputDb:
+class navMenus(modifyDb):
   def __init__(self):
-    pass
-  def print_db(self):
-    for row in table:
-      print(*row)
-
-class navDb(modifyDb, outputDb):
-  def __init__(self):
-    pass
-  def parent_menu(self):
-    print("""
-Welcome to Track-My-Expenses! 
+    self.parent_menu_vis = """
+*** MAIN MENU ***
 
 Type '1' to see your expenses.
 
 Type '2' to modify expenses.
 
-Type '3' for metrics.\n
-""")
-    open = input()
-    if open == "1":
-      odb.print_db()
-    if open == "2":
-      # add mod menu here, will need to be moved to new class 
-      
-      
-  def mod_menu(self):
-    print ("""
+Type '3' for metrics.
+
+Type '4' to end program.\n
+"""
+    self.mod_menu_vis = """
 Type 1' to add an expense.
 
 Type '2' to delete an expense.
 
-Type '3' to change expense details.\n
+Type '3' to change expense details.
 
 Type '4' to return to the parent menu.
-  """)
-    
-
-
-  
-  
-    
+  """
+    self.end_message = '\nClosing Track-My-Expenses.'
+  def parent_menu(self):
+    print(self.parent_menu_vis)
+    open = input()
+    if open == "1":
+      self.print_db()
+    if open == "2":
+      self.mod_menu()
+    if open == "3":
+      pass
+    if open == "4":
+      print(self.end_message)
+      while 1 == 1:
+        break
+  def mod_menu(self):
+    print(self.mod_menu_vis)
+    self.mod_menu_actions()
+  def mod_menu_actions(self):
+    modify_inpt = input()
+    if modify_inpt == "1":
+      add_exp = input("\nEnter an expense for addition in the 'ID, Amount, Payee' format e.g. 1, 17.00, James: ").split(',')
+      id = add_exp[0]
+      amount = round(float(add_exp[1]))
+      payee = add_exp[2]
+      mdb.add_expense(id, amount, payee)
+      print(f'\nYour expense has been added:\n{table}')
+      self.mod_menu()
+    if modify_inpt == "2":
+      del_exp = input("Enter ID of expense for deletion: ")
+      id = del_exp
+      mdb.del_expense(id)
+      print(f'Expense ID {id} was deleted:\n{table}')
+      self.mod_menu()
+    if modify_inpt == "3":
+      mod_exp = input("Enter ID of expense for modification: ")
+      id = mod_exp
+      mdb.mod_expense(id)
+      self.mod_menu()
+    if modify_inpt == "4":
+      self.parent_menu()
+  def print_db(self):
+    for row in table:
+      print(*row)
+    self.parent_menu()
+      
 
 mdb = modifyDb()
-odb = outputDb()
-ndb = navDb()
+nm = navMenus()
 
-ndb.parent_menu()
+print("Welcome to Track-My-Expenses!\U0001F911\n")
+nm.parent_menu()
 
-open = input()
-if open == "1":
-  odb.print_db()
-  #return to parent_menu
-if open == "2":
-  ndb.mod_menu() 
-  modify_inpt = input()
-  if modify_inpt == "1":
-    add_exp = input("\nEnter an expense for addition in the 'ID, Amount, Payee' format e.g. 1, 17.00, James: ").split(',')
-    id = add_exp[0]
-    amount = round(add_exp[1])
-    payee = add_exp[2]
-    mdb.add_expense(id, amount, payee)
-    print(f'Your expense has been added:\n{table}')
-  if modify_inpt == "2":
-    del_exp = input("Enter ID of expense for deletion: ")
-    id = del_exp
-    mdb.del_expense(id)
-    print(f'Expense ID {id} was deleted:\n{table}')
-  if modify_inpt == "3":
-    mod_exp = input("Enter ID of expense for modification: ")
-    id = mod_exp
-    mdb.mod_expense(id)
-  if modify_inpt == "4":
-    pass
-    #return to parent menu

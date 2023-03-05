@@ -1,5 +1,3 @@
-# Make so can read table from a saved file without the formatting issues, unique IDs
-
 import os 
 
 class modifyDb:
@@ -8,7 +6,7 @@ class modifyDb:
     pass
 
   def add_expense(self, ID, Amount, Payee):
-    return table.append([ID, Amount, Payee])
+    return table.append([ID, round(float(Amount), ndigits=2), Payee])
 
   def del_expense(self, ID):
     for x in table:
@@ -24,7 +22,7 @@ class modifyDb:
           del [x[1]]
           print(x)
           new_sum = input("\nEnter a new sum: ")
-          x.insert(1, new_sum)
+          x.insert(1, round(float(new_sum), ndigits=2))
           return print(f'\nSum modified:\n{x}')
         elif usr_inp == 'Payee':
           del [x[2]]
@@ -40,30 +38,29 @@ class measureDb():
     pass
 
   def total_expenses(self):
-    total_expenses = round(int(
-      sum([0 + int(x[1]) for x in table if x[1] != 'Sum'])),
+    total_expenses = round(float(
+      sum([0 + float(x[1]) for x in table if x[1] != 'Sum'])),
                            ndigits=2)
     print(f'\nYour total expenses are £{total_expenses}')
 
   def payee_stats(self):
-    total_expenses = round(int(
-      sum([0 + int(x[1]) for x in table if x[1] != 'Sum'])),
+    total_expenses = round(float(
+      sum([0 + float(x[1]) for x in table if x[1] != 'Sum'])),
                            ndigits=2)
     payee_name = input("Enter the payee's name: ")
-    payee_total = sum([0 + int(x[1]) for x in table if x[2] == payee_name])
-    payee_perc = round(int(payee_total) / total_expenses * 100, ndigits=2)
+    payee_total = sum([0 + float(x[1]) for x in table if x[2] == payee_name])
+    payee_perc = round(float(payee_total) / total_expenses * 100, ndigits=2)
     print(
       f'\nYou paid {payee_name} £{payee_total}, this accounts for {payee_perc}% of your total expenses.'
     )
 
   def over_amt(self):
-    amt = int(input("\nEnter an amount: "))
+    amt = float(input("\nEnter an amount: "))
     total_counter = 0
     for x in table:
-      if int(x[1]) > amt:
+      if float(x[1]) > amt:
         total_counter += 1
     print(f'\nYou have {total_counter} transactions over £{amt}.')
-
 
 class navMenus(modifyDb, measureDb):
 
@@ -102,6 +99,7 @@ Type '3' to find total payments over a given amount.
 Type '4' to return to the main menu.\n
 """
     self.end_message = '\nSaving expenses and closing Track-My-Expenses.'
+
 
   def parent_menu(self):
     print(self.parent_menu_vis)
@@ -144,7 +142,6 @@ Type '4' to return to the main menu.\n
     if modify_inpt == "3":
       mod_exp = input("\nEnter ID of expense for modification: ")
       ID = mod_exp
-      #this need to be passed as an integer for the function to work
       mdb.mod_expense(ID)
       self.mod_menu()
     if modify_inpt == "4":
@@ -173,11 +170,17 @@ Type '4' to return to the main menu.\n
       print(*row)
     self.parent_menu()
 
-table = []
+table = [['1',20,'James']]
+print([x[0] for x in table])
 saved_expenses = open('track.txt', 'w')
 mdb = modifyDb()
 nm = navMenus()
+
 print("Welcome to Track-My-Expenses!\U0001F911\n")
 nm.parent_menu()
+
+
+
+
 
 

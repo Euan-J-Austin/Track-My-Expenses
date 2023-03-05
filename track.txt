@@ -1,1 +1,1 @@
-[['1', 1.0, 'James'], ['2', 2.0, 'Henry'], ['3', 3.0, 'BT']]
+When program is exited the expenses table is saved here.
